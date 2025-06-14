@@ -12,6 +12,10 @@ $(info -- APP_PKG_ID is set to $(APP_PKG_ID))
 APP_VERSION:=4.0
 $(info -- APP_VERSION is set to $(APP_VERSION))
 
+# Code signing identity (can be overridden with make CODESIGN_IDENTITY="Your Identity")
+CODESIGN_IDENTITY?=-
+$(info -- CODESIGN_IDENTITY is set to $(CODESIGN_IDENTITY))
+
 BUILD_DIR:=build
 BUILD_TIMESTAMP:=$(shell TZ=Asia/Katmandu date)
 
@@ -32,6 +36,8 @@ build-install-package:
 	$(info -- Preparing installation package directory)
 	mkdir -p $(BUILD_DIR)/installpkgroot/Library/Keyboard\ Layouts/
 	cp -aR lib/$(APP_ID).bundle $(BUILD_DIR)/installpkgroot/Library/Keyboard\ Layouts/
+	$(info -- Code signing the bundle)
+	codesign --force --sign "$(CODESIGN_IDENTITY)" $(BUILD_DIR)/installpkgroot/Library/Keyboard\ Layouts/$(APP_ID).bundle
 	$(info -- Building installation package)
 	mkdir -p $(BUILD_DIR)/package/
 	pkgbuild --identifier $(APP_PKG_ID) \

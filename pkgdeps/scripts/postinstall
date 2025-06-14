@@ -7,6 +7,36 @@ log_post() {
 
 log_post "Starting postinstall"
 
+# Clear input source caches to ensure the new keyboard layout is recognized
+log_post "Clearing input source caches"
+
+# Clear Text Input Services cache
+if [ -d "/System/Library/Caches/com.apple.IntlDataCache.le.kbdx" ]; then
+    log_post "Clearing IntlDataCache"
+    rm -rf "/System/Library/Caches/com.apple.IntlDataCache.le.kbdx" 2>/dev/null || true
+fi
+
+# Clear user-specific input source caches
+for user_home in /Users/*; do
+    if [ -d "$user_home" ] && [ "$(basename "$user_home")" != "Shared" ]; then
+        user_cache_dir="$user_home/Library/Caches/com.apple.IntlDataCache.le.kbdx"
+        if [ -d "$user_cache_dir" ]; then
+            log_post "Clearing user cache for $(basename "$user_home")"
+            rm -rf "$user_cache_dir" 2>/dev/null || true
+        fi
+    fi
+done
+
+# Refresh input source list by restarting relevant services
+log_post "Refreshing input source services"
+
+# Kill and restart the Text Input Services
+killall -HUP "TextInputMenuAgent" 2>/dev/null || true
+killall -HUP "SystemUIServer" 2>/dev/null || true
+
+# Touch the keyboard layouts directory to trigger a refresh
+touch "/Library/Keyboard Layouts" 2>/dev/null || true
+
 log_post "Finished postinstall"
 
 exit 0

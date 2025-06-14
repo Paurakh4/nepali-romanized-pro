@@ -12,7 +12,7 @@
         </strings>
     </localization>
     <allowed-os-versions>
-        <os-version min="10.10"/>
+        <os-version min="10.15"/>
     </allowed-os-versions>
     <title>NR_TITLE</title>
     <background mime-type="image/png" file="background.png" alignment="bottomleft" scaling="none"/>

@@ -3,10 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>BuildVersion</key>
-	<string></string>
+	<string>4.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>4.0</string>
+	<key>CFBundleVersion</key>
+	<string>4.0</string>
 	<key>ProjectName</key>
 	<string>nepali-romanized</string>
 	<key>SourceVersion</key>
-	<string></string>
+	<string>4.0.0</string>
 </dict>
 </plist>
